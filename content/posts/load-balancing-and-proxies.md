@@ -5,8 +5,6 @@ title = 'Load Balancing and Proxies'
 tags = ['load balancing', 'proxies', 'reverse proxy', 'HAProxy', 'nginx', 'Envoy']
 +++
 
-# Load Balancing and Proxies
-
 this is a part of my obsidian notes on load balancing and proxies. 
 I haven't turned it into a full post yet, but I wanted to share the raw notes in case they're useful.
 Hope to learn more networking concepts and fill in the gaps over time.

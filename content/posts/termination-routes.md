@@ -5,7 +5,7 @@ title = 'Termination Routes'
 tags = ['openshift', 'istio', 'tls termination']
 +++
 
-# termination value for route
+## Termination value for route
 Termination is a property of OpenShift Routes that determines how TLS is handled between 
 the client, the router (HAProxy), and the backend pods. You can see the termination type 
 in the output of `oc get routes -o wide` under the "Termination" column.
