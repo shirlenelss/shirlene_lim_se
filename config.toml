@@ -1,0 +1,24 @@
+baseURL = 'https://shirlene.lim.se/'
+locale = 'en-us'
+title = 'My DevSecOps Project'
+theme = "hugo-theme-m10c"
+
+[params]
+author = "Shirlene Lim"
+description = "DevOps engineer with a developer's roots. Pipelines, infrastructure, and lessons from shipping software."
+avatar = "images/avatar.png"
+
+[[params.social]]
+icon = "brand-github"
+name = "My Github"
+url = "https://github.com/shirlenelss"
+
+[[menu.main]]
+identifier = "about"
+name = "About"
+url = "/about/"
+
+[[menu.main]]
+identifier = "tags"
+name = "Tags"
+url = "/tags/"
