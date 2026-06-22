@@ -2,6 +2,7 @@
 date = '2026-06-22T21:55:56+02:00'
 draft = true
 title = 'Istio Whitelist'
+tags = ['istio', 'kubernetes', 'security']
 +++
 
 # Gateways
