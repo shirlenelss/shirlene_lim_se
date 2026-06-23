@@ -14,11 +14,25 @@ name = "My Github"
 url = "https://github.com/shirlenelss"
 
 [[menu.main]]
+identifier = "home"
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+identifier = "istio"
+name = "Istio"
+url = "/tags/istio/"
+weight = 2
+
+[[menu.main]]
+identifier = "kubernetes"
+name = "Kubernetes"
+url = "/tags/kubernetes/"
+weight = 3
+
+[[menu.main]]
 identifier = "about"
 name = "About"
 url = "/about/"
-
-[[menu.main]]
-identifier = "tags"
-name = "Tags"
-url = "/tags/"
+weight = 4

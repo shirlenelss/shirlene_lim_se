@@ -1,0 +1,41 @@
+.tags-statusbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2rem;
+  background: $darkest-color;
+  border-top: 1px solid rgba($light-color, 0.2);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  z-index: 200;
+}
+
+.tags-carousel-track {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  white-space: nowrap;
+  animation: scroll-tags 40s linear infinite;
+
+  .tag {
+    color: $light-color;
+    font-size: 0.75em;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $lightest-color;
+    }
+  }
+}
+
+@keyframes scroll-tags {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+// Prevent status bar from covering page content
+body {
+  padding-bottom: 2rem;
+}
