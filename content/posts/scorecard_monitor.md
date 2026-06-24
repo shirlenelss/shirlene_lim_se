@@ -93,6 +93,6 @@ You can also add a score badge to the repo's README:
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/diggsweden/wallet-provider/badge)](https://securityscorecards.dev/viewer/?uri=github.com/diggsweden/wallet-provider)
 
 The monitor also generates an org-level report. Here's an example report from the setup I ran.
-![OpenSSF Scorecard org-level report showing score deltas per repo](/images/score_report.png)
+![OpenSSF Scorecard org-level report showing score deltas per repo](/assets/images/score_report.png)
 
 Overall, this stack gives you a low-maintenance way to keep an eye on security posture across an org — the cron job does the heavy lifting, and the issue generation means nothing gets lost in a JSON file nobody reads.
