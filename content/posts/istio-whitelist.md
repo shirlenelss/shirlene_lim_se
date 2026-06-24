@@ -9,7 +9,7 @@ tags = ['istio', 'kubernetes', 'security']
 
 Traffic flow through the mesh:
 
-```
+```bash
 ingress gateway -> istio service mesh -> egress gateway
 ```
 
@@ -85,7 +85,7 @@ Check which service is the ingress gateway:
 kubectl get svc -l istio=ingressgateway -n istio-system
 ```
 
-```
+```bash
 NAME                   TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)                                                                      AGE
 istio-ingressgateway   LoadBalancer   10.0.98.7    [GATEWAY_IP]  15021:31395/TCP,80:32542/TCP,443:31347/TCP,31400:32663/TCP,15443:31525/TCP  9h
 ```

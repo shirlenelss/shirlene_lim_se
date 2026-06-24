@@ -24,7 +24,7 @@ One IP, many servers. You want to distribute traffic and avoid single points of 
 - Can't route based on URL path or hostname
 - Example: AWS NLB, hardware load balancers
 
-```
+```bash
 Client → TCP connection → L4 LB → picks backend → forwards connection
 (LB never sees HTTP content)
 ```
@@ -36,7 +36,7 @@ Client → TCP connection → L4 LB → picks backend → forwards connection
 - Slower than L4 (parses content) but much more powerful
 - Examples: **HAProxy**, **nginx**, **Envoy**, AWS ALB
 
-```
+```bash
 Client → HTTPS → L7 LB → reads "Host: my-application.se, Path: /api"
                        → picks backend based on routing rules
                        → new connection to backend
@@ -71,7 +71,7 @@ Add, remove, or modify HTTP headers before forwarding. Example: setting `X-Forwa
 
 ### Path Rewriting
 Change the URL before forwarding:
-```
+```bash
 Client requests:  /.well-known/openid-credential-issuer/pid-issuer
 Forwarded as:     /my-application-issuer/.well-known/openid-credential-issuer
 ```
