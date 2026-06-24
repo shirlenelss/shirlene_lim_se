@@ -11,7 +11,7 @@ the client, the router (HAProxy), and the backend pods. You can see the terminat
 in the output of `oc get routes -o wide` under the "Termination" column.
 
 ## Termination column values explained
-```
+```bash
 Value           Meaning
 edge            TLS terminates at the router (HAProxy), traffic to pod is plain HTTP
 edge/redirect   Same as edge, but HTTP → HTTPS redirect is enforced automatically
@@ -20,7 +20,7 @@ encryptTLS      terminates at router, then re-encrypts for the pod leg(empty)
 (empty)         No TLS plain HTTP all the way
 ```
 
-```
+```bash
 OpenShift Router (HAProxy)
 │
 Client ──── HTTPS ────► [DECRYPT] ──── HTTP ────► Pod     ← edge
@@ -33,7 +33,7 @@ Client ──── HTTP  ──── 301 ──► HTTPS ───────
 Istio+OpenShift setup, if Istio handles mTLS inside the mesh, edge is typically fine — 
 Istio secures pod-to-pod, and the router handles the external-facing cert.
 
-```
+```bash
 Client (HTTPS/HTTP2)
 ↓
 OpenShift Route — edge TLS termination (wildcard *.my-application.se)

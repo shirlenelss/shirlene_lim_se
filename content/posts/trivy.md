@@ -33,7 +33,7 @@ that had 7 rules for python. Let's apply it on java then:
 
 Nice to skip ones without fixes yet
 
-```
+```bash
 trivy image --ignore-unfixed myapp:latest
 ```
 
@@ -41,7 +41,7 @@ trivy image --ignore-unfixed myapp:latest
 
 Let's get real and focus on developing value for the business & production
 
-```
+```bash
 trivy image --severity HIGH,CRITICAL myapp:latest
 ```
 
@@ -53,7 +53,7 @@ I minimize the size of my docker image from 690MB ->199 MB
 ![[Pasted image 20251110172342.png]
 I assigned a small builder for my multistage builder
 
-```
+```bash
 FROM maven:3.9-eclipse-temurin-21-alpine AS mvn-build  
 ```
 
@@ -68,14 +68,14 @@ I understand this. After awhile, developer will ignore the report if there're so
 
 We use .dockerignore to exclude files we don't want to package, so use trivyignore to skip files or CVEs we acknowlege a vulnerability that we want to supress
 
-```
+```bash
 CVE-2022-1234
 CVE-2021-5678
 ```
 
 we could skip files these way too
 
-```
+```bash
 trivy fs --skip-dirs .git,node_modules /project
 trivy fs --skip-files LICENSE.md README.md
 ```
@@ -84,7 +84,7 @@ Or I'd exclude the files from docker images with .ignoredocker
 
 support multi arch so you don't maintain multiple dockerfiles
 
-```
+```bash
 # Multi-arch Dockerfile using BuildKit  
 ARG TARGETPLATFORM
 ```
@@ -97,7 +97,7 @@ However, if you do...
 **Syft** is a command line tool to generate it
 Nice audit on the tools we use
 
-```
+```bash
 trivy sbom sbom.spdx.json
 ```
 
@@ -106,7 +106,7 @@ trivy sbom sbom.spdx.json
 we could send the json to our security teams
 So just the summaries reach the people who wants the info
 
-```
+```yaml
 # Multi-arch Dockerfile using BuildKit  
 ARG TARGETPLATFORM  
 FROM maven:3.9-eclipse-temurin-21-alpine AS mvn-build  
@@ -159,6 +159,11 @@ ENV SPRING_PROFILES_ACTIVE=aws
 # Use sh -c to allow VAR_XMX and SPRING_PROFILES_ACTIVE expansion at runtime  
 ENTRYPOINT ["sh", "-c", "exec java \  
                 -Xmx${XMX}m \  
-                -Xss512k \                -XX:+UseContainerSupport \                -XX:MaxRAMPercentage=75.0 \                -Djavax.net.ssl.trustStore=/app/documentdb-truststore.jks \                -Djavax.net.ssl.trustStorePassword=changeit \                -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE} \  
+                -Xss512k \                
+                -XX:+UseContainerSupport \                
+                -XX:MaxRAMPercentage=75.0 \                
+                -Djavax.net.ssl.trustStore=/app/documentdb-truststore.jks \                
+                -Djavax.net.ssl.trustStorePassword=changeit \                
+                -Dspring.profiles.active=${SPRING_PROFILES_ACTIVE} \  
                 -jar /app/cv-generator.jar"]
 ```

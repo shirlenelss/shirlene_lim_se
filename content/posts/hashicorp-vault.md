@@ -31,11 +31,11 @@ Root Token is the password to access the GUI
 
 ### policy
 dir structure
-```
+```bash
 .
 ├── config
-│   ├── dev.hcl
-│   └── sandbox.hcl
+     ├── dev.hcl
+     └── sandbox.hcl
 └── vault-data
 ├── dev
 └── sandbox
@@ -54,7 +54,7 @@ path = "/home/dev1/project/mine/vault_basic/vault-data/dev"
 ```
 
 ### start it
-```
+```bash
 vault server -config=config/dev.hcl
 vault server -config=config/sandbox.hcl
 ```
@@ -78,7 +78,7 @@ token key FAKEKEYFAKEKEYFAKEKEYFAKEKEYFAKEKEYFAKEKEY
 `vault secrets tune -max-lease-ttl=87600h pki`
 
 # create a root CA (trust anchor)
-```
+```bash
 vault write pki/root/generate/internal \  
 common_name="sandbox.local" \  
 ttl=87600h
@@ -86,19 +86,19 @@ ttl=87600h
 
 
 ### or load what we already have by argoCD
-```
+```bash
 vault write pki/config/ca \  
 pem_bundle=@sandbox-root.pem
 ```
 
 ### validate alignment git vs vault
-```
+```bash
 vault read pki/cert/ca
 diff sandbox-root.pem <(vault read -field=certificate pki/cert/ca)
 ```
 
 # create intermediate CA (per env)
-```
+```bash
 vault secrets enable -path=pki-sandbox pki -description "CA for sandbox env (istio workload)"
 vault secrets tune -max-lease-ttl=43800h pki-sandbox
 
@@ -114,25 +114,27 @@ common_name="sandbox intermediate" \
 ```
 
 if run into fish command line problem
-```
+```bash
 bash -c "vault write -format=json pki-test/intermediate/generate/internal common_name='example.com' | jq -r '.data.csr' > test.csr"
 ```
 
 ## sign it with root
+```bash
 vault write -format=json pki/root/sign-intermediate \  
 csr=@sandbox.csr \  
 format=pem_bundle \  
 ttl=43800h \  
 | jq -r '.data.certificate' > sandbox.pem
+```
 
 ## set it
-```
+```bash
 vault write pki-sandbox/intermediate/set-signed \  
 certificate=@sandbox.pem
 ```
 
 # create a role (how certs are issued)
-```
+```bash
 vault write pki-sandbox/roles/istio \
 allowed_domains="svc.cluster.local" \
 allow_subdomains=true \
@@ -140,7 +142,7 @@ max_ttl="72h"
 ```
 
 ## possible architechture
-```
+```bash
 Vault  
 ├── pki-root (trust anchor)  
 ├── pki-sandbox (intermediate)  
@@ -158,7 +160,7 @@ Istio will:
 - Trust Vault’s CA chain
 
 ## export the trust anchor to istio
-```
+```bash
 vault read -field=certificate pki/cert/ca > root.pem
 ```
 
@@ -169,7 +171,7 @@ update istio path to it
 
 
 # integrate into our kubernetes manifest
-```
+```bash
 run as podman image
 docker run \  
 --name vault \  
@@ -179,6 +181,6 @@ hashicorp/vault server -dev
 ```
 ## read token
 we can even generate a token to read kv or secrets
-```
+```bash
 `vault token create -policy=app-policy -ttl=1m`
 ```
