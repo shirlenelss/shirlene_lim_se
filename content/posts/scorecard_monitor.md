@@ -1,13 +1,13 @@
 +++
 date = '2026-06-24T11:56:33+02:00'
-draft = true
+draft = false
 title = 'Monitoring OpenSSF Scorecard at Scale'
 tags = ['devsecops', 'security', 'openssf', 'scorecard']
 +++
 
-The OpenSSF Scorecard project gives us an automated way to assess the security posture of a repository, 
-but a one-off score isn't very useful on its own. What you actually want is continuous monitoring across many repos, 
-with visibility into what's changing and what's missing. 
+The OpenSSF Scorecard project gives us an automated way to assess the security posture of a repository,
+but a one-off score isn't very useful on its own. What you actually want is continuous monitoring across many repos,
+with visibility into what's changing and what's missing.
 
 Here's the tooling I've been playing with for an open source project.
 
@@ -26,26 +26,28 @@ This gives you a readable, web-based view of the differences instead of raw JSON
 
 ## Allstar
 
-[Allstar](https://github.com/ossf/allstar) is highly configurable, with three main levels of control at the org level. 
+[Allstar](https://github.com/ossf/allstar) is highly configurable, with three main levels of control at the org level.
 Organization administrators can enable Allstar on:
 
 - **all** repositories in the org;
 - **most** repositories, except some that are opted out;
 - **just a few** repositories that are opted in.
 
-Useful references: an [example `scorecard.yaml`](https://github.com/jeffmendoza/allstar/blob/main/scorecard.yaml) 
+Useful references: an [example `scorecard.yaml`](https://github.com/jeffmendoza/allstar/blob/main/scorecard.yaml)
 and the [Allstar issues](https://github.com/ossf/allstar/issues) tracker.
 
 ## Running Across Multiple Repos
 
-For a multi-repo run, [multi-scorecard](https://github.com/jeffmendoza/multi-scorecard) (Go) lets you batch the work. 
-The key insight is that **the monitor can tell you what's missing**, not just what the current score is — and because 
+For a multi-repo run, [multi-scorecard](https://github.com/jeffmendoza/multi-scorecard) (Go) lets you batch the work.
+The key insight is that **the monitor can tell you what's missing**, not just what the current score is — and because
 it runs on a cron schedule, you get this on a recurring basis automatically.
 
 The practical pattern: put the workflow YAML in a central repo so all your scoring is managed in one place.
 
 ## I chose Scorecard Monitor because it has the discovery mode and issue generation features I wanted.
+
 To implement it, I created a GitHub Actions workflow that runs weekly and generates issues for any failing checks. Here's the workflow YAML:
+
 ```yaml
 name: "OpenSSF Scoring"
 on:
@@ -80,7 +82,7 @@ jobs:
 
 ## Seeing Your Own Results
 
-Once this is wired up, your repos show up in the public Scorecard viewer. 
+Once this is wired up, your repos show up in the public Scorecard viewer.
 For example, open source project scorecard can be seen here:
 [wallet-provider repo is tracked here](https://securityscorecards.dev/viewer/?uri=github.com/diggsweden/wallet-provider).
 

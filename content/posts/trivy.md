@@ -14,7 +14,7 @@ trivy image \
 ```
 
 So my pipeline failed with a few HIGH vulnerability
-![my pipeline](../../static/images/pipeline.png)
+![my pipeline](../../assets/images/pipeline.png)
 
 
 ## So now the problem for developers are :
