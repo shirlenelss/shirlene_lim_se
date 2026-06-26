@@ -1,7 +1,7 @@
 +++
 date = '2026-06-25T21:40:04+02:00'
 draft = false
-title = 'Non violent communication by Marshall Rosenberg'
+title = 'Non violent communication by Marshall Rosenberg part 1'
 tags = ['communication', 'non-violent', 'book', 'review', 'notes']
 +++
 
