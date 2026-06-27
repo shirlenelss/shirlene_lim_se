@@ -1,6 +1,6 @@
 +++
 date = '2026-06-24T17:35:31+02:00'
-draft = true
+draft = false
 title = 'Secure sharing with Cloudflare tunnel'
 tags = ['cloudflare', 'tunnel', 'kubernetes','security']
 +++
