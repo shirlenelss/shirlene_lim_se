@@ -36,3 +36,6 @@ identifier = "about"
 name = "About"
 url = "/about/"
 weight = 4
+
+[[params.meta]]
+favicon = "favicon.ico"
