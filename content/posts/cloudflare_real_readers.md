@@ -4,9 +4,10 @@ draft = false
 title = 'Cloudflare real readers or bots?' 
 tags = ['cloudflare', 'analytics', 'security', 'devsecops']
 +++
-I deployed my devSecops blog on cloudflare and I can see the analytics of the readers.
+I deployed my devSecops blog on cloudflare a week ago and I can see the analytics of the readers.
 
 ![account analytics](/assets/images/cloudflare_account_analytics.png)
+
 Requests are 16.19K, visits are 1.46K and page views are 2.16K.
 Is it 1.46K real readers? 
 
