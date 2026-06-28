@@ -4,8 +4,9 @@ draft = false
 title = 'Istio mTLS'
 tags = ['istio', 'kubernetes', 'security', 'mTLS']
 +++
-# Mutual TLS
-some notes I took while learning about Istio mTLS
+
+Here's some notes I took while learning about Istio mTLS
+Some sources from cloudflare and partially from linux foundation training.
 
 Once workloads have a strong identity, we can use them at runtime to do mutual TLS authentication (mTLS).
 
