@@ -1,7 +1,7 @@
 +++
 date = '2026-06-28T20:48:59+02:00'
 draft = false
-title = 'Cloudflare_real_readers' 
+title = 'Cloudflare real readers or bots?' 
 tags = ['cloudflare', 'analytics', 'security', 'devsecops']
 +++
 I deployed my devSecops blog on cloudflare and I can see the analytics of the readers.
