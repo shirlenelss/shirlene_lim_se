@@ -1,7 +1,7 @@
 +++
 date = '2026-06-27T23:35:48+02:00'
 draft = false
-title = 'Istio_mtls'
+title = 'Istio mTLS'
 tags = ['istio', 'kubernetes', 'security', 'mTLS']
 +++
 # Mutual TLS
