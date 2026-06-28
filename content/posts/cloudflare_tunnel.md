@@ -2,7 +2,7 @@
 date = '2026-06-24T17:35:31+02:00'
 draft = false
 title = 'Secure sharing with Cloudflare tunnel'
-tags = ['cloudflare', 'tunnel', 'kubernetes','security']
+tags = ['cloudflare', 'tunnel', 'kubernetes', 'security', 'cloud-platforms']
 +++
 Here are my notes on setting up a Cloudflare tunnel to expose a service running in a Kubernetes cluster.
 
@@ -25,5 +25,6 @@ my linkding page https://ldpi.shirlenelim.se
 ![linkding](/assets/images/linkding2.png)
 
 my github code can be found [here](https://github.com/shirlenelss/homelab-cluster) 
-
+little caveat : my linkding service is running on a kubernetes cluster on my mac, 
+so if I'm not online then it's not up either. 
 

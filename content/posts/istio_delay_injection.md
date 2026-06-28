@@ -2,7 +2,7 @@
 date = '2026-06-27T12:17:45+02:00'  
 draft = false  
 title = 'Istio delay injection'  
-tags = ['istio', 'kubernetes', 'security', 'resilience', 'fault injection']
+tags = ['istio', 'kubernetes', 'security', 'resilience', 'fault injection', 'observability']
 +++
 
 While working through *Introduction to Istio (LFS144)* from the Linux Foundation, I wanted to dig into Istio's **fault injection** feature, specifically **delay injection**.

@@ -2,7 +2,7 @@
 date = '2026-06-22T22:46:52+02:00'
 draft = false
 title = 'Termination Routes'
-tags = ['openshift', 'istio', 'tls termination']
+tags = ['openshift', 'istio', 'tls termination', 'security']
 +++
 
 ## Termination value for route

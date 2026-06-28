@@ -2,7 +2,7 @@
 date = '2026-06-24T11:56:33+02:00'
 draft = false
 title = 'Monitoring OpenSSF Scorecard at Scale'
-tags = ['devsecops', 'security', 'openssf', 'scorecard']
+tags = ['devsecops', 'security', 'openssf', 'scorecard', 'observability']
 +++
 
 The OpenSSF Scorecard project gives us an automated way to assess the security posture of a repository,
