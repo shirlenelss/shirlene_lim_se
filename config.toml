@@ -2,7 +2,6 @@ baseURL = 'https://shirlenelim.se/'
 locale = 'en-us'
 title = """Shirlene Lim's DevSecOps Projects"""
 theme = "hugo-theme-m10c"
-enableRobotsTXT = true
 
 [params]
 author = "Shirlene Lim"
