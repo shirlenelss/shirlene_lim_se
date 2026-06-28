@@ -208,7 +208,7 @@ The proxy here being the istio-proxy, we didn't set for the customer-v1
 
 
 ### kiali shows this
-![[Pasted image 20260627200438.png]]
+![kiali](/assets/images/mTlS_kiali.png)
 no proxy injected so it says "unknown"
 
 then connect the customer to gateway
@@ -242,7 +242,7 @@ while true; do curl -H "Host: customers.default.svc.cluster.local" http://$GATEW
 
 and towards the service
 ```bash
-while true; do curl ht‌tp://$GATEWAY_IP; done
+while true; do curl http://$GATEWAY_IP; done
 ```
 
 kiali will show
