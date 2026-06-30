@@ -209,7 +209,7 @@ The proxy here being the istio-proxy, we didn't set for the customer-v1
 
 
 kiali will show this
-![kiali](/assets/images/mTlS_kiali.png)
+![kiali](/assets/images/mTLS_kiali.png)
 no proxy injected so it says "unknown"
 
 then connect the customer to gateway
