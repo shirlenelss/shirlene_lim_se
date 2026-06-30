@@ -208,7 +208,7 @@ permission allows it if the service has no proxy.
 The proxy here being the istio-proxy, we didn't set for the customer-v1
 
 
-### kiali shows this
+kiali will show this
 ![kiali](/assets/images/mTlS_kiali.png)
 no proxy injected so it says "unknown"
 
