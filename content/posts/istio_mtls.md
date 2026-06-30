@@ -247,7 +247,7 @@ while true; do curl http://$GATEWAY_IP; done
 ```
 
 kiali will show
-![kiali padlocks](/assets/images/mTlS_kiali_padlocks.png)
+![kiali padlocks](/assets/images/kiali_padlocks.png)
 MTLS (notice padlock) for the traffic towards customers-v1
 not for web-frontend (without MTLS/proxy)
 
