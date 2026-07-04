@@ -1,6 +1,6 @@
 +++
 date = '2026-07-04T12:52:56+08:00'
-draft = true
+draft = false
 title = 'Debugging Istio Sidecars with istioctl'
 tags = ['istio', 'kubernetes', 'observability', 'envoy']
 +++
