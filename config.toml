@@ -6,7 +6,7 @@ theme = "hugo-theme-m10c"
 [params]
 author = "Shirlene Lim"
 description = "DevOps engineer with a developer's roots. Pipelines, infrastructure, and lessons from shipping software."
-avatar = "images/avatar.png"
+avatar = "avatar.png"
 
 [[params.social]]
 icon = "brand-github"
