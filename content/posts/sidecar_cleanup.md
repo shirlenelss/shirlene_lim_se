@@ -1,6 +1,6 @@
 +++
 date = '2026-07-15T12:03:02+08:00'
-draft = true
+draft = false
 title = 'Sidecar cleanup is important'
 tags = ['istio', 'kubernetes', 'performance', 'envoy']
 +++
