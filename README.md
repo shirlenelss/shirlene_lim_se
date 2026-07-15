@@ -5,3 +5,13 @@ and the theme is a custom one based on the popular "m10c" theme.
 
 The site is built with Hugo, a static site generator that allows me to write in Markdown and 
 generate a fast, secure, and easily deployable website.
+
+## Development
+
+To run the development server with draft posts visible:
+
+```bash
+hugo server -D
+```
+
+The `-D` flag (or `--buildDrafts`) includes draft posts in the build, which is useful for previewing content before publishing.
