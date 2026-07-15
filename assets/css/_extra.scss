@@ -39,3 +39,88 @@
 body {
   padding-bottom: 2rem;
 }
+
+// Override theme's container width constraints for full-width layout
+.app-container {
+  max-width: none !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @media (min-width: 940px) {
+    margin-left: 20rem !important;  // Keep sidebar offset
+    margin-right: 0 !important;
+  }
+
+  @media (max-width: 939px) {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+// Two-column layout for list pages with graph
+.list-with-graph {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  max-width: 100%;
+  width: 100%;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+}
+
+.list-content {
+  flex: 1;
+  min-width: 0;
+  margin-right: 0;
+}
+
+.tag-graph-sidebar {
+  flex: 1;
+  max-width: 500px;
+  min-width: 350px;
+  position: sticky;
+  top: 1rem;
+  align-self: flex-start;
+  margin-left: 2rem;
+  margin-right: 0;  // Remove right margin
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+
+  h3 {
+    font-size: 1.2em;
+    margin-bottom: 0.5rem;
+    color: $darkest-color;
+  }
+
+  .graph-controls {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba($dark-color, 0.2);
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  #tag-graph {
+    border: 2px solid rgba($primary-color, 0.3);
+    border-radius: 8px;
+    background: #242930;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba($darkest-color, 0.1);
+    height: calc(100vh - 4rem - 2rem - 3rem);
+    min-height: 400px;
+
+    svg {
+      display: block;
+      border-radius: 4px;
+      background: #242930;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+

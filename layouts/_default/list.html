@@ -1,25 +1,191 @@
 {{ define "main" }}
-  <article>
-    {{ with .Title -}}<h1>{{- . -}}</h1>{{- end }}
-    {{ with .Content -}}<div class="post-content">{{- . -}}</div>{{- end }}
-    <ul class="posts-list">
-      {{ $pages := where .Pages "Type" "!=" "page" }}
-      {{ $sortedPages := $pages.ByPublishDate.Reverse }}
-      {{ $paginator := .Paginate $sortedPages }}
-      {{ range $paginator.Pages }}
-        <li class="posts-list-item">
-          <a class="posts-list-item-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-          <span class="posts-list-item-description">
-            {{ partial "icon.html" (dict "ctx" $ "name" "calendar") }}
-            {{ .PublishDate.Format "Jan 2, 2006" }}
-            <span class="posts-list-item-separator">-</span>
-            {{ partial "icon.html" (dict "ctx" $ "name" "clock") }}
-            {{ .ReadingTime }} min read
-          </span>
-        </li>
+  <div class="list-with-graph">
+    <article class="list-content">
+      {{ with .Title -}}<h1>{{- . -}}</h1>{{- end }}
+      {{ with .Content -}}<div class="post-content">{{- . -}}</div>{{- end }}
+      <ul class="posts-list">
+        {{ $pages := where .Pages "Type" "!=" "page" }}
+        {{ $sortedPages := $pages.ByPublishDate.Reverse }}
+        {{ $paginator := .Paginate $sortedPages }}
+        {{ range $paginator.Pages }}
+          <li class="posts-list-item">
+            <a class="posts-list-item-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+            <span class="posts-list-item-description">
+              {{ partial "icon.html" (dict "ctx" $ "name" "calendar") }}
+              {{ .PublishDate.Format "Jan 2, 2006" }}
+              <span class="posts-list-item-separator">-</span>
+              {{ partial "icon.html" (dict "ctx" $ "name" "clock") }}
+              {{ .ReadingTime }} min read
+            </span>
+          </li>
+        {{ end }}
+      </ul>
+      {{ partial "pagination.html" $ }}
+    </article>
+
+    <aside class="tag-graph-sidebar">
+      <div id="tag-graph"></div>
+      <div class="graph-controls">
+        <small style="color: #afbac4; font-size: 11px;">🔍 Scroll to zoom • Drag to pan • Click tags to filter</small>
+      </div>
+    </aside>
+  </div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script>
+    // Build tag network data
+    const tagData = {
+      nodes: [],
+      links: []
+    };
+
+    const tagMap = new Map();
+    const tagConnections = new Map();
+
+    // Collect all tags and their relationships
+    {{ range site.RegularPages }}
+      {{ with .Params.tags }}
+        {{ $currentTags := . }}
+        {{ range $i, $tag1 := $currentTags }}
+          {{ $tag1Lower := lower $tag1 }}
+          if (!tagMap.has('{{ $tag1Lower }}')) {
+            tagMap.set('{{ $tag1Lower }}', {
+              id: '{{ $tag1Lower }}',
+              name: '{{ $tag1 }}',
+              count: 0,
+              url: '/tags/{{ $tag1 | urlize }}/'
+            });
+            tagConnections.set('{{ $tag1Lower }}', new Set());
+          }
+          tagMap.get('{{ $tag1Lower }}').count++;
+
+          {{ range $j, $tag2 := $currentTags }}
+            {{ if ne $i $j }}
+              {{ $tag2Lower := lower $tag2 }}
+              tagConnections.get('{{ $tag1Lower }}').add('{{ $tag2Lower }}');
+            {{ end }}
+          {{ end }}
+        {{ end }}
       {{ end }}
-    </ul>
-    {{ partial "pagination.html" $ }}
-  </article>
+    {{ end }}
+
+    // Convert to D3 format
+    tagData.nodes = Array.from(tagMap.values());
+
+    // Create links
+    tagConnections.forEach((targets, source) => {
+      targets.forEach(target => {
+        if (tagMap.has(source) && tagMap.has(target)) {
+          tagData.links.push({
+            source: source,
+            target: target
+          });
+        }
+      });
+    });
+
+    console.log('Tag data:', tagData);
+    console.log('Nodes:', tagData.nodes.length, 'Links:', tagData.links.length);
+
+    // Create graph
+    const container = document.getElementById('tag-graph');
+    if (!container) {
+      console.error('tag-graph container not found!');
+    }
+    const width = container.clientWidth || 300;
+    const height = container.clientHeight || 600;
+
+    const svg = d3.select('#tag-graph')
+      .append('svg')
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('viewBox', [0, 0, width, height])
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    // Create a group for zooming and panning
+    const g = svg.append('g');
+
+    // Add zoom behavior
+    const zoom = d3.zoom()
+      .scaleExtent([0.1, 4])  // Allow zoom from 10% to 400%
+      .on('zoom', (event) => {
+        g.attr('transform', event.transform);
+      });
+
+    svg.call(zoom);
+
+    // Set initial zoom to fit all content
+    svg.call(zoom.transform, d3.zoomIdentity.scale(1));
+
+    const simulation = d3.forceSimulation(tagData.nodes)
+      .force('link', d3.forceLink(tagData.links).id(d => d.id).distance(40))
+      .force('charge', d3.forceManyBody().strength(-150))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('collision', d3.forceCollide().radius(15))
+      .force('x', d3.forceX(width / 2).strength(0.05))
+      .force('y', d3.forceY(height / 2).strength(0.05));
+
+    const link = g.append('g')
+      .selectAll('line')
+      .data(tagData.links)
+      .join('line')
+      .attr('stroke', '#57cc8a')
+      .attr('stroke-opacity', 0.4)
+      .attr('stroke-width', 1.5);
+
+    const node = g.append('g')
+      .selectAll('g')
+      .data(tagData.nodes)
+      .join('g')
+      .call(d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended));
+
+    node.append('circle')
+      .attr('r', d => Math.min(4 + d.count * 1.5, 12))
+      .attr('fill', '#57cc8a')
+      .style('cursor', 'pointer');
+
+    node.append('text')
+      .text(d => d.name)
+      .attr('font-size', '11px')
+      .attr('dx', 10)
+      .attr('dy', 4)
+      .style('cursor', 'pointer')
+      .attr('fill', '#ffffff')
+      .attr('font-weight', '600');
+
+    node.on('click', (event, d) => {
+      window.location.href = d.url;
+    });
+
+    simulation.on('tick', () => {
+      link
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
+
+      node.attr('transform', d => `translate(${d.x},${d.y})`);
+    });
+
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+  </script>
 {{ end }}
 
