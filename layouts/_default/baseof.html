@@ -18,6 +18,21 @@
     {{ template "_internal/google_analytics.html" . }}
     {{ template "_internal/twitter_cards.html" . }}
     {{ template "_internal/opengraph.html" . }}
+    {{ if and (eq .Kind "page") (eq .Section "posts") }}
+    {{ $ld := dict
+      "@context" "https://schema.org"
+      "@type" "BlogPosting"
+      "headline" .Title
+      "description" .Description
+      "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+      "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+      "url" .Permalink
+      "mainEntityOfPage" .Permalink
+      "keywords" (delimit (.Params.tags | default slice) ", ")
+      "author" (dict "@type" "Person" "name" .Site.Params.author)
+    }}
+    <script type="application/ld+json">{{ $ld | jsonify (dict "indent" "  ") | safeJS }}</script>
+    {{ end }}
 
   </head>
   <body>
@@ -35,15 +50,20 @@
       </nav>
       {{- end }}
       <p>{{ .Site.Params.description | default "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium." }}</p>
-      {{- with .Site.Params.social }}
       <div class="app-header-social">
+        {{- with .Site.Params.social }}
         {{ range . }}
           <a href="{{ .url }}" target="_blank" rel="noreferrer noopener me">
             {{ partial "icon.html" (dict "ctx" $ "name" .icon "title" .name) }}
           </a>
         {{ end }}
+        {{- end }}
+        {{ with .OutputFormats.Get "rss" }}
+          <a href="{{ .Permalink }}" title="RSS Feed">
+            {{ partial "icon.html" (dict "ctx" $ "name" "rss" "title" "RSS Feed") }}
+          </a>
+        {{ end }}
       </div>
-      {{- end }}
     </header>
     <main class="app-container">
       {{ block "main" . }}

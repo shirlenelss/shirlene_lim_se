@@ -3,6 +3,7 @@ date = '2026-06-27T23:35:48+02:00'
 draft = false
 title = 'Istio mTLS'
 tags = ['istio', 'kubernetes', 'security', 'mTLS']
+description = "How Istio's mutual TLS works under the hood, and what to check when service-to-service encryption isn't behaving as expected."
 +++
 
 Here's some notes I took while learning about Istio mTLS

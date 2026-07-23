@@ -3,6 +3,7 @@ date = '2026-06-22T22:46:52+02:00'
 draft = false
 title = 'Termination Routes'
 tags = ['openshift', 'istio', 'tls termination', 'security']
+description = "How OpenShift Route termination types control TLS handling between the client, the router, and backend pods."
 +++
 
 ## Termination value for route

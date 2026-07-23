@@ -3,6 +3,7 @@ date = '2026-07-04T12:52:56+08:00'
 draft = false
 title = 'Debugging Istio Sidecars with istioctl'
 tags = ['istio', 'kubernetes', 'observability', 'envoy']
+description = "A hands-on guide to diagnosing Istio sidecar issues using istioctl — the commands that actually help when things break."
 +++
 
 Sometimes things go wrong in Istio and you need to figure out what exactly is happening. 

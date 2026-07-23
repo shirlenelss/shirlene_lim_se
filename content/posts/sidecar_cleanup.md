@@ -3,6 +3,7 @@ date = '2026-07-15T12:03:02+08:00'
 draft = false
 title = 'Sidecar cleanup is important'
 tags = ['istio', 'kubernetes', 'performance', 'envoy']
+description = "Why leftover Istio sidecars cause silent problems in Kubernetes clusters, and how to clean them up properly."
 +++
 
 

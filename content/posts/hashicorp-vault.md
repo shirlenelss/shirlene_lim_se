@@ -3,6 +3,7 @@ date = '2026-06-23T02:35:27+02:00'
 draft = false
 title = 'Hashicorp vault'
 tags = ['vault', 'pki', 'istio', 'kubernetes', 'security', 'secrets']
+description = "Notes on running HashiCorp Vault in dev mode and using it as a PKI backend to issue certificates for Istio workloads."
 +++
 
 my notes on vault, pki and istio integration

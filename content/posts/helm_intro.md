@@ -3,6 +3,7 @@ date = '2026-07-17T22:01:27+08:00'
 draft = false
 title = 'Helm Intro'
 tags = ['helm', 'kubernetes', 'flux', 'gitops', 'homelab']
+description = "A practical introduction to Helm charts for Kubernetes — what they are, why you'd use them, and how to get started."
 +++
 
 Helm, the package manager for Kubernetes is a package manager that helps you define, install, and upgrade even the most complex Kubernetes applications.

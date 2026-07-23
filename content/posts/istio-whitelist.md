@@ -3,6 +3,7 @@ date = '2026-06-22T21:55:56+02:00'
 draft = false
 title = 'Istio Whitelist'
 tags = ['istio', 'kubernetes', 'security']
+description = "How Istio Gateways, AuthorizationPolicy, and RequestAuthentication work together to whitelist which callers can reach a workload."
 +++
 
 # Gateways

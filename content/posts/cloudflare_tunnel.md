@@ -3,6 +3,7 @@ date = '2026-06-24T17:35:31+02:00'
 draft = false
 title = 'Secure sharing with Cloudflare tunnel'
 tags = ['cloudflare', 'tunnel', 'kubernetes', 'security', 'cloud-platforms']
+description = "How to expose a Kubernetes service to the internet with a Cloudflare Tunnel, without opening any inbound ports."
 +++
 Here are my notes on setting up a Cloudflare tunnel to expose a service running in a Kubernetes cluster.
 

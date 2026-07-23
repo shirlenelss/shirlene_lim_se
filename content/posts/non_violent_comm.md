@@ -3,6 +3,7 @@ date = '2026-06-25T21:40:04+02:00'
 draft = false
 title = 'Non violent communication by Marshall Rosenberg part 1'
 tags = ['communication', 'non-violent', 'book', 'review', 'notes']
+description = "Notes on Marshall Rosenberg's Nonviolent Communication, and why how we talk to each other matters for how teams build software (part 1)."
 +++
 
 Well, what does this book on communication have to do with devsecops? 

@@ -3,6 +3,7 @@ date = '2026-06-24T12:38:53+02:00'
 draft = false
 title = 'Reducing Trivy Noise and Making CI/CD Scans Actually Useful'
 tags = ['trivy', 'cve', 'security', 'docker', 'java', 'ci-cd']
+description = "How I cut through Trivy noise in CI/CD and turned CVE scanning into something actually useful, not just a wall of alerts."
 +++
 
 

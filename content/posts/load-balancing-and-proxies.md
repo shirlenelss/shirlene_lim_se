@@ -3,6 +3,7 @@ date = '2026-06-22T22:27:54+02:00'
 draft = false
 title = 'Load Balancing and Proxies'
 tags = ['load balancing', 'proxies', 'reverse proxy', 'HAProxy', 'nginx', 'Envoy', 'infrastructure']
+description = "Working notes on load balancing and proxies — the problems they solve, and how HAProxy, nginx, and Envoy each approach it."
 +++
 
 this is a part of my obsidian notes on load balancing and proxies. 

@@ -3,6 +3,7 @@ date = '2026-06-27T00:07:31+02:00'
 draft = false
 title = 'Non violent communication - part 2'
 tags = ['communication', 'non-violent', 'book', 'review', 'notes']
+description = "Part 2 of my notes on Nonviolent Communication, on separating observation from evaluation in how we give feedback."
 +++
 
 ## Observing with evaluating
