@@ -2,6 +2,7 @@
 title: "About"
 date: 2026-06-22
 draft: false
+meta-description: "Shirlene Lim is a DevSecOps engineer writing about Kubernetes, Istio, CI/CD, and infrastructure security — learning in public, one pipeline at a time."
 ---
 
 ## Hi, I'm Shirlene
