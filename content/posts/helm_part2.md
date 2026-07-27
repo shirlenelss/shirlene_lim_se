@@ -74,12 +74,6 @@ path were the `ingressClassName` and the cert-manager annotation, so cert-manage
 issue a TLS cert automatically. Without the annotation, ingress comes up fine but stays on
 plain HTTP.
 
-### Show values with my own values file to see applied picture
-We can also use the `helm show values` command with our own values file to see what values are set in that file. This is useful if we want to see what values we have customized
-```
-helm show values prometheus-community/kube-prometheus-stack -f release.yaml
-```
-
 # Gotchas
 
 A couple of things that tripped me up:
