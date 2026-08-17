@@ -102,6 +102,6 @@ Neither of these would have prevented the *first* mistake, but either alone woul
 
 **3. `prune: true` is not a toy.** It's the whole point of GitOps — but it means the blast radius of "what does my kustomization.yaml actually list" is the entire managed tree, not just the file you're looking at.
 
-Once the cluster was stable again, I still had the thing I'd actually sat down to do that evening: move Grafana off a Cloudflare Tunnel onto a real ingress with a proper TLS cert. That part — and the two more gotchas it came with — is [its own post](/posts/grafana-cert-manager-lets-encrypt).
+Once the cluster was stable again, I still had the thing I'd actually sat down to do that evening: move Grafana off a Cloudflare Tunnel onto a real ingress with a proper TLS cert. That part — and the two more gotchas it came with — is [its own post](../grafana-cert-manager-lets-encrypt).
 
 Here's the repo https://github.com/shirlenelss/homelab-cluster
