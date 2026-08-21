@@ -1,6 +1,6 @@
 +++
 date = '2026-08-21T10:55:56+02:00'
-draft = true
+draft = false
 title = 'Would This Survive 30 Services? Replacing Per-App Kustomize With One Helm Chart'
 tags = ['helm', 'kustomize', 'argocd', 'gitops', 'kubernetes', 'istio', 'traefik', 'homelab']
 description = "The Kustomize setup for my Argo CD promotion demo worked fine for two services, then I asked what 30 would look like. The honest answer was ugly, so I replaced it with one shared Helm chart and a matrix ApplicationSet."
