@@ -22,7 +22,7 @@ What if we have no toothbrush...but want to brush teeth?
 Here's the silly repo: 
 https://gitlab.com/shirlenelss/gitlab-ci-project
 
-I install glab-local an npm package that allows me to run gitlab ci pipeline locally.
+I install gitlab-ci-local an npm package that allows me to run gitlab ci pipeline locally.
 ![gitlab-ci-local](/assets/images/gitlab-ci-fun.png)
 
 
