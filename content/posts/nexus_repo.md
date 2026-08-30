@@ -1,6 +1,6 @@
 +++
 date = '2026-08-31T00:26:56+02:00'
-draft = true
+draft = false
 title = 'Setting up a Nexus Repository for Maven'
 tags = ['nexus', 'maven', 'repository', 'docker', 'devops', 'ci-cd']   
 description = "A guide to setting up a Nexus repository for Maven using Docker, including configuration and troubleshooting tips."
