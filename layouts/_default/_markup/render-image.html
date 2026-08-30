@@ -1,0 +1,2 @@
+{{ $u := urls.Parse .Destination }}
+<img src="{{ $u.Path | safeURL }}" alt="{{ .Text }}"{{ with $u.Query.Get "width" }} width="{{ . }}"{{ end }} loading="lazy">

@@ -3,7 +3,7 @@ date = '2026-08-28T23:09:33+02:00'
 draft = false
 title = 'Gitlab CI and daily routines'
 description = "A simple and fun gitlab ci pipeline that everyone should do daily."
-tags = ['gitlab', 'ci', 'pipeline', 'fun']
+tags = ['gitlab', 'ci-cd', 'pipeline', 'fun']
 +++
 
 I was reading a senior devops engineer's gitlab ci pipeline to test our new registry 
