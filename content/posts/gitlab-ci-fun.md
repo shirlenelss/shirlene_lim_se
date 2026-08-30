@@ -25,6 +25,20 @@ https://gitlab.com/shirlenelss/gitlab-ci-project
 I install gitlab-ci-local an npm package that allows me to run gitlab ci pipeline locally.
 ![gitlab-ci-local](/assets/images/gitlab-ci-fun.png)
 
+This is how we do a sanity check 
+```bash
+gitlab-ci-local --preview
+```
+
+List the jobs and stages in the pipeline.
+```bash
+gitlab-ci-local --list
+```
+
+Run with verbose to see the logs of the pipeline.
+```bash
+gitlab-ci-local --shell-executor-no-image
+```
 
 That's to see even without pushing any changes to gitlab. 
 So it's essential to have while developing. 
