@@ -137,7 +137,7 @@ Could not transfer metadata se.shirlenelimab:demo-system:0.0.1-SNAPSHOT/maven-me
 [ERROR]
 ```
 
-ops! let's check it out. I had a typo in my settings.xml, I had homelab-snapshots instead of homelab-snapshots.
+ops! let's check it out. I had a typo in my settings.xml, I had hoemlab-snapshots instead of homelab-snapshots.
 
 we have to add the server for the snapshot repo in the settings.xml, so maven can push pull to it.
 So here's the snapshot in my repository. 
