@@ -5,6 +5,9 @@
       {{ with .Content -}}<div class="post-content">{{- . -}}</div>{{- end }}
       <ul class="posts-list">
         {{ $pages := where .Pages "Type" "!=" "page" }}
+        {{ if .IsHome }}
+          {{ $pages = where site.RegularPages "Type" "!=" "page" }}
+        {{ end }}
         {{ $sortedPages := $pages.ByPublishDate.Reverse }}
         {{ $paginator := .Paginate $sortedPages }}
         {{ range $paginator.Pages }}
