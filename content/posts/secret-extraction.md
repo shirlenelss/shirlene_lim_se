@@ -4,6 +4,7 @@ draft = false
 title = 'Why secret extraction matters'
 tags = ['kubernetes', 'argo', 'gitops', 'secrets', 'security']
 +++
+![sealed secret](/assets/images/sealed-secret.png)
 
 Recently, I have been working on our kubernetes cluster on argo and gitops.
 A senior colleague mention that we had a pretty significant high security concern.
