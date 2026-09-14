@@ -96,3 +96,15 @@ Use a centralized identity management provider instead.
 First, our certificates and secret being plucked out from clear text to kubernetes resources. 
 I'll reweigh my options again when I get to the stage of implementing a vault or secrets store.
 Gitops, pipelines and devops to think about. 
+
+But, basically if you want your secrets in the git, encrypt them. Choose a generated key and store it in a secure location. 
+Use a tool to encrypt the secrets before committing them to the repo
+
+Bitnami Sealed Secrets is a good option for that.
+Sops age is what I use for my personal projects. 
+There's more tools out there.
+
+Secure location: might be a hardware security module (HSM) or a cloud-based key management service or even a secure password manager that supports encryption and access control. 
+The key is to ensure that only authorized personnel can access the encryption keys, and that they are rotated regularly to minimize the risk of compromise.
+
+The options are many, but the key is to ensure that your secrets are not exposed in plaintext in your git repository.
