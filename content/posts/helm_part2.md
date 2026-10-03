@@ -91,5 +91,7 @@ A couple of things that tripped me up:
 After flux kustomization applied, we can see the grafana dashboard is now accessible via ingress with the new password set in the `release.yaml` file.
 http://grafana.shirlenelim.se
 
+{{< homelab-note >}}
+
 Here's the CoreDNS dashboard
 ![kubelet dashboard](/assets/images/grafana_dashboard.png)

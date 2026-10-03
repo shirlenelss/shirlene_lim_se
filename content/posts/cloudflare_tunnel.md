@@ -23,6 +23,9 @@ After that go to cloudflare dashboard, add a tunnel add a route to your service,
 and then you can access it from the public internet.
 ![linkding cluster on my mac](/assets/images/linkding.png)
 my linkding page https://ldpi.shirlenelim.se
+
+{{< homelab-note >}}
+
 ![linkding](/assets/images/linkding2.png)
 
 my github code can be found [here](https://github.com/shirlenelss/homelab-cluster) 
