@@ -3,27 +3,35 @@
     <article class="list-content">
       {{ with .Title -}}<h1>{{- . -}}</h1>{{- end }}
       {{ with .Content -}}<div class="post-content">{{- . -}}</div>{{- end }}
-      <ul class="posts-list">
-        {{ $pages := where .Pages "Type" "!=" "page" }}
-        {{ if .IsHome }}
-          {{ $pages = where site.RegularPages "Type" "!=" "page" }}
-        {{ end }}
-        {{ $sortedPages := $pages.ByPublishDate.Reverse }}
-        {{ $paginator := .Paginate $sortedPages }}
-        {{ range $paginator.Pages }}
-          <li class="posts-list-item">
-            <a class="posts-list-item-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-            <span class="posts-list-item-description">
-              {{ partial "icon.html" (dict "ctx" $ "name" "calendar") }}
-              {{ .PublishDate.Format "Jan 2, 2006" }}
-              <span class="posts-list-item-separator">-</span>
-              {{ partial "icon.html" (dict "ctx" $ "name" "clock") }}
-              {{ .ReadingTime }} min read
-            </span>
-          </li>
+      {{ $pages := where .Pages "Type" "!=" "page" }}
+      {{ if .IsHome }}
+        {{ $pages = where site.RegularPages "Type" "!=" "page" }}
+      {{ end }}
+      {{ $sortedPages := $pages.ByPublishDate.Reverse }}
+      {{ $paginator := .Paginate $sortedPages }}
+
+      <div class="tag-filter">
+        <input id="tag-filter-input" type="text" placeholder="Tip: type a tag like istio · ↑↓ pick · Tab complete · Enter filter · Esc clear"
+               autofocus autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list"
+               aria-expanded="false" aria-controls="tag-filter-suggestions" />
+        <ul id="tag-filter-suggestions" class="tag-filter-suggestions" role="listbox" hidden></ul>
+        <div id="tag-filter-status" class="tag-filter-status" hidden></div>
+      </div>
+
+      <div id="posts-paginated">
+        <ul class="posts-list">
+          {{ range $paginator.Pages }}
+            {{ template "post-item" (dict "page" . "ctx" $) }}
+          {{ end }}
+        </ul>
+        {{ partial "pagination.html" $ }}
+      </div>
+
+      <ul id="posts-filtered" class="posts-list" hidden>
+        {{ range $sortedPages }}
+          {{ template "post-item" (dict "page" . "ctx" $) }}
         {{ end }}
       </ul>
-      {{ partial "pagination.html" $ }}
     </article>
 
     <aside class="tag-graph-sidebar">
@@ -33,6 +41,113 @@
       </div>
     </aside>
   </div>
+
+  <script>
+    (() => {
+      const input = document.getElementById('tag-filter-input');
+      const box = document.getElementById('tag-filter-suggestions');
+      const status = document.getElementById('tag-filter-status');
+      const paginated = document.getElementById('posts-paginated');
+      const filtered = document.getElementById('posts-filtered');
+      const items = Array.from(filtered.querySelectorAll('.posts-list-item'));
+
+      const tagNames = new Map();
+      items.forEach(li => {
+        li.tags = JSON.parse(li.dataset.tags || '[]').map(t => {
+          const key = t.toLowerCase();
+          if (!tagNames.has(key)) tagNames.set(key, t);
+          return key;
+        });
+      });
+      const allTags = Array.from(tagNames.keys()).sort();
+
+      let matches = [];
+      let active = -1;
+
+      function closeSuggestions() {
+        box.hidden = true;
+        input.setAttribute('aria-expanded', 'false');
+        active = -1;
+      }
+
+      function renderSuggestions() {
+        const q = input.value.trim().toLowerCase();
+        if (!q) { matches = []; closeSuggestions(); return; }
+        const starts = allTags.filter(t => t.startsWith(q));
+        const contains = allTags.filter(t => !t.startsWith(q) && t.includes(q));
+        matches = starts.concat(contains).slice(0, 8);
+        active = -1;
+        box.replaceChildren(...matches.map((t, i) => {
+          const li = document.createElement('li');
+          li.textContent = tagNames.get(t);
+          li.setAttribute('role', 'option');
+          li.addEventListener('mousedown', e => {
+            e.preventDefault();
+            input.value = tagNames.get(t);
+            applyFilter();
+          });
+          return li;
+        }));
+        box.hidden = matches.length === 0;
+        input.setAttribute('aria-expanded', String(!box.hidden));
+      }
+
+      function highlight(i) {
+        active = i;
+        Array.from(box.children).forEach((li, j) => li.classList.toggle('active', j === i));
+      }
+
+      function applyFilter() {
+        closeSuggestions();
+        const q = input.value.trim().toLowerCase();
+        if (!q) { clearFilter(); return; }
+        const exact = allTags.includes(q);
+        let shown = 0;
+        items.forEach(li => {
+          const hit = exact ? li.tags.includes(q) : li.tags.some(t => t.includes(q));
+          li.hidden = !hit;
+          if (hit) shown++;
+        });
+        paginated.hidden = true;
+        filtered.hidden = false;
+        status.textContent = `${shown} post${shown === 1 ? '' : 's'} tagged "${input.value.trim()}"`;
+        status.hidden = false;
+      }
+
+      function clearFilter() {
+        input.value = '';
+        closeSuggestions();
+        items.forEach(li => { li.hidden = false; });
+        filtered.hidden = true;
+        paginated.hidden = false;
+        status.hidden = true;
+      }
+
+      input.addEventListener('input', renderSuggestions);
+      input.addEventListener('blur', closeSuggestions);
+      input.addEventListener('keydown', e => {
+        if (e.key === 'ArrowDown' && matches.length) {
+          e.preventDefault();
+          if (box.hidden) renderSuggestions();
+          highlight((active + 1) % matches.length);
+        } else if (e.key === 'ArrowUp' && matches.length) {
+          e.preventDefault();
+          highlight(active <= 0 ? matches.length - 1 : active - 1);
+        } else if (e.key === 'Tab' && !box.hidden && matches.length) {
+          e.preventDefault();
+          input.value = tagNames.get(matches[Math.max(active, 0)]);
+          renderSuggestions();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (active >= 0) input.value = tagNames.get(matches[active]);
+          applyFilter();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          clearFilter();
+        }
+      });
+    })();
+  </script>
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script>
@@ -190,5 +305,20 @@
       d.fy = null;
     }
   </script>
+{{ end }}
+
+{{ define "post-item" }}
+  {{ with .page }}
+  <li class="posts-list-item" data-tags="{{ .Params.tags | default slice | jsonify }}">
+    <a class="posts-list-item-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+    <span class="posts-list-item-description">
+      {{ partial "icon.html" (dict "ctx" $.ctx "name" "calendar") }}
+      {{ .PublishDate.Format "Jan 2, 2006" }}
+      <span class="posts-list-item-separator">-</span>
+      {{ partial "icon.html" (dict "ctx" $.ctx "name" "clock") }}
+      {{ .ReadingTime }} min read
+    </span>
+  </li>
+  {{ end }}
 {{ end }}
 
