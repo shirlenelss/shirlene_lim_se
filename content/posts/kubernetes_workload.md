@@ -1,7 +1,7 @@
 +++
 date = '2026-10-16T00:07:33+02:00'
 draft = true
-title = 'Kubernetes_workload'
+title = 'Kubernetes workloads'
 tags = ['kubernetes', 'workload', 'deployment', 'replicaset', 'statefulset', 'daemonset', 'job', 'cronjob']
 +++
 # kubernetes #workloads
