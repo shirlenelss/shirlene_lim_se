@@ -1,6 +1,6 @@
 +++
 date = '2026-10-19T21:14:36+02:00'
-draft = true
+draft = false
 title = 'Is docker daemon running?'
 tags = ['docker', 'daemon', 'docker context', 'docker desktop']
 +++
