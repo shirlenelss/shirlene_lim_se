@@ -1,12 +1,13 @@
 +++
 date = '2026-10-16T00:07:33+02:00'
-draft = true
+draft = false
 title = 'Kubernetes workloads'
 tags = ['kubernetes', 'workload', 'deployment', 'replicaset', 'statefulset', 'daemonset', 'job', 'cronjob']
 +++
 # kubernetes #workloads
 
 Here is my raw notes when I was learning about kubernetes workloads.
+Basic kubernetes knowledge
 
 ## deployment
 - control what to deploy
