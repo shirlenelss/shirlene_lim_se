@@ -34,7 +34,7 @@ Organization administrators can enable Allstar on:
 - **most** repositories, except some that are opted out;
 - **just a few** repositories that are opted in.
 
-Useful references: an [example `scorecard.yaml`](https://github.com/jeffmendoza/allstar/blob/main/scorecard.yaml)
+Useful references: the [Allstar README](https://github.com/ossf/allstar/blob/main/README.md)
 and the [Allstar issues](https://github.com/ossf/allstar/issues) tracker.
 
 ## Running Across Multiple Repos
