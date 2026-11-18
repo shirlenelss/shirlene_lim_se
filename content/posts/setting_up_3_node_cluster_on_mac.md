@@ -59,7 +59,7 @@ Default NAT does not let the VMs reach each other or let the Mac SSH in.
 route get default | grep interface  
 ```  
 
-![[image-6.png]]
+![virtualbox](/assets/images/virtualbox.png)
 
 (MacBook: `en0` = Wi-Fi.)
 
