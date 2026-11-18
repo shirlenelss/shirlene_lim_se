@@ -6,7 +6,7 @@ title = 'Setting up 3 node cluster on mac'
 
 # Homelab Kubernetes Cluster on macOS (VirtualBox)
 
-I have decided to use as a 3 node kubeadm cluster for my studies. Intension is to see /etcd in action instead on rancher desktop.   
+I have decided to use as a 3 node kubeadm cluster for my studies. Intention is to see /etcd in action instead on rancher desktop.   
 Rancher desktop doesn't use the /etcd so a bit different environment than what I need.   
 The goal is to use VM and linux iso to practice some networking while leaving my mac environment as is.
 
