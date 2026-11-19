@@ -496,7 +496,7 @@ kubectl run test --rm -it --image=busybox:1.36 --restart=Never -- sh -c "nslooku
 ## finally cleanup
 ```
 kubectl delete deployment web
-kubectl delete svc webß
+kubectl delete svc web
 
 ```
 
