@@ -291,9 +291,9 @@ example router dhcp assigned ip
 ---
 
 # network problems
-It seems after the post went up in LinkedIn someone pointed out that my router dhcp assigned ip might break when network changed.  
+It seems after the [post](https://lnkd.in/p/dhMNVcCj) went up in LinkedIn, [Levente Behr](https://www.linkedin.com/in/leventebehr/) pointed out that my router dhcp assigned ip might break when network changed.  
 Dhcp lease is temporary. It renews to same address but no guarantees.   
-So I got recommended to use the two adapter layout: NAT for internet, host-only for cluster
+So I decided to use the two adapter layout: NAT for internet, host-only for cluster
 
 # to start using static ip instead 
 ![two adapter network](/assets/images/two_adapter_network.png)  
