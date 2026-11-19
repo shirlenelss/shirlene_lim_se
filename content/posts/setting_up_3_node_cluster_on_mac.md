@@ -281,9 +281,222 @@ kubectl get pods -A      # all Running
 ---  
 
 ## Node inventory
-example assigned ip
-| Hostname | IP           | Notes         |     |
-| -------- | ------------ | ------------- | --- |
-| cp1      | 192.168.0.58 | control plane |     |
-| worker1  | 192.168.0.59 |               |     |
-| worker2  | 192.168.0.60 |               |     |
+example router dhcp assigned ip
+
+| Hostname | IP           | Notes         |
+| -------- | ------------ | ------------- |
+| cp1      | 192.168.0.58 | control plane |
+| worker1  | 192.168.0.59 |               |
+| worker2  | 192.168.0.60 |               |
+---
+
+# network problems
+It seems after the post went up in LinkedIn someone pointed out that my router dhcp assigned ip might break when network changed.  
+Dhcp lease is temporary. It renews to same address but no guarantees.   
+So I got recommended to use the two adapter layout: NAT for internet, host-only for cluster
+
+# to start using static ip instead 
+![two adapter network](/assets/images/two_adapter_network.png)  
+the plan is to have this layout 
+- NIC1 = NAT, for internet
+- NIC2 = host-only k8s, with fixed IPs set inside each VM:  
+  - cp1 192.168.56.10 
+  - worker1 .11 
+  - worker2 .12
+
+First I restart the mac to refresh the vmnet
+
+Then added a k8s host-only network with the range from 192.168.56.100 to 192.168.56.199  
+then switch cp1 to using the host-only "k8s" network and verify it 
+```
+VBoxManage hostonlynet add --name=k8s --netmask=255.255.255.0 --lower-ip=192.168.56.100 --upper-ip=192.168.56.199 --enable && \
+VBoxManage list hostonlynets && \
+VBoxManage modifyvm cp1 --nic1=nat --nic2=hostonlynet --host-only-net2=k8s --cable-connected2=on && \
+VBoxManage showvminfo cp1 --machinereadable | grep -E '^(nic[12]=|hostonly)')
+```
+
+## netplan 
+In each of my vms, I powered off and use netplan instead
+
+![netplan.yaml](/assets/images/netplan.png)    
+
+| Hostname | IP           | Notes         |
+| -------- | ------------ | ------------- |
+| cp1      | 192.168.56.10 | control plane |
+| worker1  | 192.168.56.11 |               |
+| worker2  | 192.168.56.12 |               |
+
+--- 
+
+# cp1 setup 
+
+This is the static config for host-only adapter.  
+Use your own interface name. 
+```host-only.yaml 
+ls /etc/netplan/     # check for an earlier file that already sets enp0s9
+sudo tee /etc/netplan/60-hostonly.yaml <<'EOF'
+network:
+  version: 2
+  ethernets:
+    enp0s9:
+      dhcp4: false
+      addresses: [192.168.56.10/24] # change this to the correct ip for the workers
+EOF
+sudo chmod 600 /etc/netplan/60-hostonly.yaml
+sudo netplan apply
+ip -br a
+```
+the results are:
+```
+# cp1
+shirlim@cp1:~$ ip -br a
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+enp0s8           UP             10.0.2.15/24 metric 100 
+enp0s9           UP             192.168.56.10/24 
+```
+
+I needed to reset and restart the kubeadm on cp1 before setting up the workers
+```
+# reset 
+sudo kubeadm reset -f
+sudo rm -rf /etc/cni/net.d $HOME/.kube/config
+sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
+
+# restart
+echo 'KUBELET_EXTRA_ARGS=--node-ip=192.168.56.10' | sudo tee /etc/default/kubelet
+# tell kubeadm to use the 
+sudo kubeadm init \
+  --apiserver-advertise-address=192.168.56.10 \
+  --pod-network-cidr=10.244.0.0/16
+```
+### flags explanation 
+- apiserver-advertise-address is the address the API server announces to the rest of the cluster.
+- pod-network-cidr is the range pods get their addresses from. It must not overlap with your VM networks (10.0.2.0/24 and 192.168.56.0/24 here).
+
+## And..result!
+```
+Your Kubernetes control-plane has initialized successfully!
+```
+
+
+and then we'll see some more instructions for setting up network and kubeadm join commands prints out.
+So following that, adding calico networking pods so that the control panel becomes READY
+
+# setup network
+To start using the cluster, run these: 
+```
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl get nodes
+```
+
+## setup calico
+```
+curl -LO https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/manifests/calico.yaml
+sed -i 's|# - name: CALICO_IPV4POOL_CIDR|- name: CALICO_IPV4POOL_CIDR|; s|#   value: "192.168.0.0/16"|  value: "10.244.0.0/16"|' calico.yaml
+grep -A1 CALICO_IPV4POOL_CIDR calico.yaml
+
+   - name: CALICO_IPV4POOL_CIDR
+      value: "10.244.0.0/16"
+              
+kubectl apply -f calico.yaml
+kubectl set env daemonset/calico-node -n kube-system IP_AUTODETECTION_METHOD=cidr=192.168.56.0/24
+kubectl get pods -n kube-system -w
+```
+
+![calico_created](/assets/images/calico_created.png)   
+
+wait till its done ...
+
+---
+
+## workers setup 
+```
+# worker1
+sudo kubeadm reset -f
+sudo rm -rf /etc/cni/net.d
+echo 'KUBELET_EXTRA_ARGS=--node-ip=192.168.56.11' | sudo tee /etc/default/kubelet
+sudo kubeadm join 192.168.56.10:6443 --token pwxjww.rrtwskk8vh2vunjs --discovery-token-ca-cert-hash sha256:the_token
+```
+```
+# worker2
+sudo kubeadm reset -f
+sudo rm -rf /etc/cni/net.d
+echo 'KUBELET_EXTRA_ARGS=--node-ip=192.168.56.12' | sudo tee /etc/default/kubelet
+sudo kubeadm join 192.168.56.10:6443 --token pwxjww.rrtwskk8vh2vunjs --discovery-token-ca-cert-hash sha256:the_token
+```
+
+
+##  workers results 
+```
+# worker1
+shirlim@worker1:~$ ip -br a
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+enp0s8           UP             10.0.2.15/24 metric 
+enp0s9           UP             192.168.56.11/24
+
+# worker2 
+shirlim@worker2:~$ ip -br a
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+enp0s8           UP             10.0.2.15/24 metric 
+enp0s9           UP             192.168.56.12/24 
+```
+
+# verify network is working
+## in cp1 after the workers join the cluster 
+```
+shirlim@cp1:~$ kubectl get nodes -o wide
+NAME      STATUS   ROLES           AGE    VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION             CONTAINER-RUNTIME
+cp1       Ready    control-plane   102m   v1.36.6   192.168.56.10   <none>        Ubuntu 26.04.1 LTS   7.0.0-43-generic (arm64)   containerd://2.2.2
+worker1   Ready    <none>          81m    v1.36.6   192.168.56.11   <none>        Ubuntu 26.04.1 LTS   7.0.0-43-generic (arm64)   containerd://2.2.2
+worker2   Ready    <none>          67m    v1.36.6   192.168.56.12   <none>        Ubuntu 26.04.1 LTS   7.0.0-43-generic (arm64)   containerd://2.2.2
+
+# testing 
+kubectl create deployment web --image=nginx --replicas=3
+kubectl get pods -o wide
+deployment.apps/web created
+NAME                   READY   STATUS              RESTARTS   AGE   IP       NODE      NOMINATED NODE   READINESS GATES
+web-7887448d46-g7jst   0/1     ContainerCreating   0          0s    <none>   worker2   <none>           <none>
+web-7887448d46-hf9n6   0/1     Pending             0          0s    <none>   worker2   <none>           <none>
+web-7887448d46-njr9j   0/1     ContainerCreating   0          0s    <none>   worker1   <none>           <none> 
+
+...wait till its ready 
+
+# expose service to internet 
+kubectl expose deployment web --port=80 --type=NodePort
+kubectl get svc web
+service/web exposed 
+NAME   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+web    NodePort   10.104.79.129   <none>        80:32239/TCP   0s
+
+# check endpoints, we expect 1 for each replica
+kubectl get endpoints web
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME   ENDPOINTS                                             AGE
+web    10.244.189.66:80,10.244.189.67:80,10.244.235.130:80   2m57s
+
+# test internal ip 
+curl http://10.104.79.129
+```
+
+## verify from outside cluster 
+```
+# test nodes from mac 
+curl http://192.168.56.10:32239
+curl http://192.168.56.11:32239
+curl http://192.168.56.12:32239
+
+# test web pods, dns, pod to service 
+kubectl get pods -o wide
+kubectl run test --rm -it --image=busybox:1.36 --restart=Never -- sh -c "nslookup kubernetes.default; wget -qO- http://web | head -3"
+```
+
+## finally cleanup
+```
+kubectl delete deployment web
+kubectl delete svc webß
+
+```
+
